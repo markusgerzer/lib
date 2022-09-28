@@ -5,6 +5,8 @@ import com.soywiz.korge.view.*
 import com.soywiz.korio.lang.*
 import com.soywiz.korma.geom.*
 
+private const val ZOOM_MODE_EVENT_LISTENER = "ZoomModeEventListener"
+
 fun Stage.zoomModeOn() {
     fun zoomIn() {
         scale += .05
@@ -23,16 +25,15 @@ fun Stage.zoomModeOn() {
             y += if (y > .0) y / f else -y / f
         }
     }
-    println("Zoom on")
+
     val mouseZoom = addEventListener<MouseEvent> {
         when {
-            it.scrollDeltaYPixels < .0 -> { println("Zoom in"); zoomIn() }
-            it.scrollDeltaYPixels > .0 -> { println("Zoom out"); zoomOut() }
+            it.scrollDeltaYPixels < .0 -> zoomIn()
+            it.scrollDeltaYPixels > .0 -> zoomOut()
         }
     }
-    addProp("mouseZoom", mouseZoom)
-    var dStart = .0
 
+    var dStart = .0
     val touchZoom = addEventListener<TouchEvent> {
         if (it.isStart && it.touches.size ==  2) {
             val p0 = Point(it.touches[0].x, it.touches[0].y)
@@ -44,16 +45,42 @@ fun Stage.zoomModeOn() {
             val dEnd = p0.distanceTo(p1)
             val d = dEnd - dStart
             when {
-                d > .0 -> { println("Zoom in"); zoomIn(); dStart = dEnd }
-                d < .0 -> { println("Zoom out"); zoomOut(); dStart = dEnd }
+                d > .0 -> { zoomIn(); dStart = dEnd }
+                d < .0 -> { zoomOut(); dStart = dEnd }
             }
         }
     }
-    addProp("touchZoom", touchZoom)
+
+    var scroll = false
+    var scrollX = 0
+    var scrollY = 0
+    val mouseScroll = addEventListener<MouseEvent> {
+        if (it.type == MouseEvent.Type.DOWN /*&& it.button == MouseButton.MIDDLE*/) {
+            scroll = true
+            scrollX = it.x
+            scrollY = it.y
+        } else if (it.type == MouseEvent.Type.UP /*&& it.button == MouseButton.MIDDLE*/) {
+            scroll = false
+        } else if (it.type == MouseEvent.Type.DRAG && scroll) {
+            val dX = it.x - scrollX
+            val dY = it.y - scrollY
+            scrollX = it.x
+            scrollY = it.y
+            val minX = width - scaledWidth
+            val minY = height - scaledHeight
+            x = (x + dX).coerceIn(minX .. .0)
+            y = (y + dY).coerceIn(minY .. .0)
+        }
+    }
+
+    val listener = listOf(mouseZoom, touchZoom, mouseScroll)
+    addProp(ZOOM_MODE_EVENT_LISTENER, listener)
 }
 
 fun Stage.zoomModeOff() {
-    println("Zoom off")
-    getProp<Closeable>("mouseZoom").close()
-    getProp<Closeable>("touchZoom").close()
+    val listener = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER) ?: return
+    listener.forEach(Closeable::close)
+    addProp(ZOOM_MODE_EVENT_LISTENER, listOf<Closeable>())
 }
+
+fun Stage.zoomMode() = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER)?.isNotEmpty() ?: false
