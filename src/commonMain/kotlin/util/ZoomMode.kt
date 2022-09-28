@@ -83,4 +83,4 @@ fun Stage.zoomModeOff() {
     addProp(ZOOM_MODE_EVENT_LISTENER, listOf<Closeable>())
 }
 
-fun Stage.zoomMode() = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER)?.isNotEmpty() ?: false
+val Stage.zoomMode get() = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER)?.isNotEmpty() ?: false
