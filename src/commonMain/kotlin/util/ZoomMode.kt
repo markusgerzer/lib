@@ -9,10 +9,13 @@ private const val ZOOM_MODE_EVENT_LISTENER = "ZoomModeEventListener"
 
 fun Stage.zoomModeOn() {
     fun zoomIn() {
+        val mX = mouseX
+        val mY = mouseY
         scale += .05
-        x = mouseX - width * scale / 2
-        y = mouseY - height * scale / 2
+        x += (mouseX - mX) * scaleX
+        y += (mouseY - mY) * scaleY
     }
+
     fun zoomOut() {
         if (scale <= 1.05) {
             scale = 1.0
