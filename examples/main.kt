@@ -41,7 +41,7 @@ class SceneA : Scene() {
         solidRect(10.0, 10.0, Colors.BLACK).xy(.0, scaledWidth - 10.0)
         solidRect(10.0, 10.0, Colors.BLACK).xy(scaledWidth - 10.0, .0)
         solidRect(10.0, 10.0, Colors.BLACK).xy(scaledWidth - 10.0, scaledWidth - 10.0)
-        circle(75.0) {
+        circle(5.0) {
             color = Colors.BLUE
             centerOnStage()
         }
