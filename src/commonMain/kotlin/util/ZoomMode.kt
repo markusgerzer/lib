@@ -12,7 +12,7 @@ fun Stage.zoomModeOn() {
     fun zoomIn() {
         val mX = mouseX
         val mY = mouseY
-        scale += ZOOM_STEP
+        scale = (scale + ZOOM_STEP).coerceAtMost(maxZoom)
         x += (mouseX - mX) * scaleX
         y += (mouseY - mY) * scaleY
     }
@@ -88,3 +88,6 @@ fun Stage.zoomModeOff() {
 }
 
 val Stage.zoomMode get() = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER)?.isNotEmpty() ?: false
+
+private var maxZoom = 5.0
+var Stage.maxZoom by ::maxZoom
