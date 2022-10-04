@@ -6,24 +6,25 @@ import com.soywiz.korio.lang.*
 import com.soywiz.korma.geom.*
 
 private const val ZOOM_MODE_EVENT_LISTENER = "ZoomModeEventListener"
+private const val ZOOM_STEP = .05
 
 fun Stage.zoomModeOn() {
     fun zoomIn() {
         val mX = mouseX
         val mY = mouseY
-        scale += .05
+        scale += ZOOM_STEP
         x += (mouseX - mX) * scaleX
         y += (mouseY - mY) * scaleY
     }
 
     fun zoomOut() {
-        if (scale <= 1.05) {
+        if (scale <= 1.0 + ZOOM_STEP) {
             scale = 1.0
             x = .0
             y = .0
         } else {
-            val f = (scale - 1.0) / .05
-            scale -= .05
+            val f = (scale - 1.0) / ZOOM_STEP
+            scale -= ZOOM_STEP
             x += if (x > .0) x / f else -x / f
             y += if (y > .0) y / f else -y / f
         }
