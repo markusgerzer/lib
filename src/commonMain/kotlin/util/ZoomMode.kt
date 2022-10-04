@@ -5,8 +5,16 @@ import com.soywiz.korge.view.*
 import com.soywiz.korio.lang.*
 import com.soywiz.korma.geom.*
 
+
 private const val ZOOM_MODE_EVENT_LISTENER = "ZoomModeEventListener"
 private const val ZOOM_STEP = .05
+
+
+private var maxZoom = 5.0
+var Stage.maxZoom by ::maxZoom
+
+val Stage.zoomMode get() = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER)?.isNotEmpty() ?: false
+
 
 fun Stage.zoomModeOn() {
     fun zoomIn() {
@@ -86,8 +94,3 @@ fun Stage.zoomModeOff() {
     listener.forEach(Closeable::close)
     addProp(ZOOM_MODE_EVENT_LISTENER, listOf<Closeable>())
 }
-
-val Stage.zoomMode get() = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER)?.isNotEmpty() ?: false
-
-private var maxZoom = 5.0
-var Stage.maxZoom by ::maxZoom
