@@ -54,8 +54,12 @@ class ZoomComponent(override val view: View) : MouseComponent, TouchComponent {
 
     override fun onMouseEvent(views: Views, event: MouseEvent) {
         when {
-            event.scrollDeltaYPixels < .0 -> zoomIn(views)
-            event.scrollDeltaYPixels > .0 -> zoomOut()
+            event.type == MouseEvent.Type.SCROLL -> {
+                when {
+                    event.scrollDeltaYPixels < .0 -> zoomIn(views)
+                    event.scrollDeltaYPixels > .0 -> zoomOut()
+                }
+            }
             event.type == MouseEvent.Type.DOWN -> {
                 scroll = true
                 scrollX = event.x
