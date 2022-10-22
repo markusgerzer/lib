@@ -6,7 +6,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.*
 
 
-fun View.addZoomComponent(view: View) =
+fun View.addZoomComponent() =
     addZoomComponent(ZoomComponentMousePart(this), ZoomComponentTouchPart(this))
 
 fun View.addZoomComponent(cm : ZoomComponentMousePart, ct : ZoomComponentTouchPart): ZoomComponent {
