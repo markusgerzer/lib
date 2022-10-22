@@ -87,7 +87,7 @@ class SceneB : Scene() {
             color = Colors.BLUE
             centerOnStage()
         }
-        val zoomComponent = addZoomComponent()
+        val zoomComponent = addZoomComponent(ZoomComponent(this))
         //removeZoomComponent(zoomComponent)
     }
 }
