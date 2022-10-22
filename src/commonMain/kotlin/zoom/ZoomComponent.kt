@@ -5,10 +5,14 @@ import com.soywiz.korge.component.*
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.*
 
-fun View.addZoomComponent(c: ZoomComponent): ZoomComponent {
-    addComponent(c as MouseComponent)
-    addComponent(c as TouchComponent)
-    return c
+
+fun View.addZoomComponent(view: View) =
+    addZoomComponent(ZoomComponentMousePart(this), ZoomComponentTouchPart(this))
+
+fun View.addZoomComponent(cm : ZoomComponentMousePart, ct : ZoomComponentTouchPart): ZoomComponent {
+    addComponent(cm as MouseComponent)
+    addComponent(ct as TouchComponent)
+    return cm
 }
 
 fun View.removeZoomComponent(c: ZoomComponent) {
@@ -16,7 +20,7 @@ fun View.removeZoomComponent(c: ZoomComponent) {
     removeComponent(c as TouchComponent)
 }
 
-class ZoomComponent(override val view: View) : MouseComponent, TouchComponent {
+abstract class ZoomComponent(override val view: View) : Component {
     var zoomStep = .05
     var maxZoom = 5.0
 
@@ -47,7 +51,9 @@ class ZoomComponent(override val view: View) : MouseComponent, TouchComponent {
         view.x = (view.x + dX).coerceIn(minX .. .0)
         view.y = (view.y + dY).coerceIn(minY .. .0)
     }
+}
 
+class ZoomComponentMousePart(override val view: View) : ZoomComponent(view), MouseComponent {
     private var scroll = false
     private var scrollX = 0
     private var scrollY = 0
@@ -75,7 +81,9 @@ class ZoomComponent(override val view: View) : MouseComponent, TouchComponent {
             }
         }
     }
+}
 
+class ZoomComponentTouchPart(override val view: View) : ZoomComponent(view), TouchComponent {
     private var dStart = .0
 
     override fun onTouchEvent(views: Views, e: TouchEvent) {
