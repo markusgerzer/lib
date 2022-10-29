@@ -4,6 +4,7 @@ import com.soywiz.korge.input.*
 import com.soywiz.korge.ui.*
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
+import misc.*
 
 inline fun Stage.confirmBox(
     msg: String,
@@ -34,19 +35,24 @@ class ConfirmBox(
         get() = box.strokeThickness
         set(value) { box.strokeThickness = value }
 
-    fun onConfirm(callback: suspend () -> Unit) = _onConfirmCallbacks.add(callback)
-    private val _onConfirmCallbacks = mutableListOf<suspend () -> Unit>()
-    private suspend fun confirmed() { for (callback in _onConfirmCallbacks) callback() }
+    val confirmed = SimpleEventSuspend()
+    fun onConfirm(callback: suspend () -> Unit) = confirmed.addCallback(callback)
+    //fun onConfirm(callback: suspend () -> Unit) = _onConfirmCallbacks.add(callback)
+    //private val _onConfirmCallbacks = mutableListOf<suspend () -> Unit>()
+    //private suspend fun confirmed() { for (callback in _onConfirmCallbacks) callback() }
 
-    fun onNoConfirm(callback: suspend () -> Unit) = _onNoConfirmCallbacks.add(callback)
-    private val _onNoConfirmCallbacks = mutableListOf<suspend () -> Unit>()
-    private suspend fun notConfirmed() { for (callback in _onNoConfirmCallbacks) callback() }
+    val notConfirmed = SimpleEventSuspend()
+    fun onNoConfirm(callback: suspend () -> Unit) = notConfirmed.addCallback(callback)
+    //fun onNoConfirm(callback: suspend () -> Unit) = _onNoConfirmCallbacks.add(callback)
+    //private val _onNoConfirmCallbacks = mutableListOf<suspend () -> Unit>()
+    //private suspend fun notConfirmed() { for (callback in _onNoConfirmCallbacks) callback() }
 
     private val clickBlocker = stage.fixedSizeContainer(stage.width, stage.height)
 
     private val box =
         clickBlocker.roundRect(width, height, rx, ry) {
             stroke = Colors.BLACK
+            strokeThickness = 4.0
             centerOn(clickBlocker)
 
             uiButton("Yes") {

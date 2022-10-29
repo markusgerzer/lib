@@ -1,3 +1,4 @@
+import com.soywiz.klock.*
 import com.soywiz.korev.*
 import com.soywiz.korge.*
 import com.soywiz.korge.input.*
@@ -6,8 +7,11 @@ import com.soywiz.korge.view.*
 import com.soywiz.korgw.*
 import com.soywiz.korim.color.*
 import com.soywiz.korinject.*
+import com.soywiz.korio.async.*
 import com.soywiz.korma.geom.*
+import kotlinx.coroutines.*
 import stageZoom.*
+import ui.*
 import zoom.*
 import kotlin.reflect.*
 
@@ -21,10 +25,12 @@ object ConfigModule : Module() {
     override val clipBorders = false
     override val scaleAnchor = Anchor.BOTTOM
     //override val mainScene: KClass<out Scene> = SceneA::class
-    override val mainScene: KClass<out Scene> = SceneB::class
+    //override val mainScene: KClass<out Scene> = SceneB::class
+    override val mainScene: KClass<out Scene> = SceneC::class
     override suspend fun AsyncInjector.configure() {
         mapPrototype { SceneA() }
         mapPrototype { SceneB() }
+        mapPrototype { SceneC() }
     }
 }
 
@@ -89,5 +95,20 @@ class SceneB : Scene() {
         }
         val zoomComponent = addZoomComponent(ZoomComponent(this))
         //removeZoomComponent(zoomComponent)
+    }
+}
+
+class SceneC : Scene() {
+    override suspend fun SContainer.sceneMain() {
+        while (true) {
+            val job = launchImmediately(Dispatchers.Default) {
+                stage?.confirmBox("Message....", 300.0, 100.0, 20.0, 20.0) {
+                    onConfirm { println("Confirmed") }
+                    onNoConfirm { println("Not confirmed") }
+                }
+            }
+            delay(3000.milliseconds)
+            job.join()
+        }
     }
 }
