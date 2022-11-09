@@ -26,11 +26,13 @@ object ConfigModule : Module() {
     override val scaleAnchor = Anchor.BOTTOM
     //override val mainScene: KClass<out Scene> = SceneA::class
     //override val mainScene: KClass<out Scene> = SceneB::class
-    override val mainScene: KClass<out Scene> = SceneC::class
+    //override val mainScene: KClass<out Scene> = SceneC::class
+    override val mainScene: KClass<out Scene> = SceneD::class
     override suspend fun AsyncInjector.configure() {
         mapPrototype { SceneA() }
         mapPrototype { SceneB() }
         mapPrototype { SceneC() }
+        mapPrototype { SceneD() }
     }
 }
 
@@ -109,6 +111,33 @@ class SceneC : Scene() {
             }
             delay(3000.milliseconds)
             job.join()
+        }
+    }
+}
+
+class SceneD : Scene() {
+    override suspend fun SContainer.sceneMain() {
+
+        val a = uiComboBoxArray2(boxPadding = 5.0, items = (1..6).toList(), numberOfComboBoxes = 6) {
+            x = 100.0
+            y = 50.0
+
+            for (i in 1 until 6) deactivateComboBox(i)
+
+            onSelectionUpdate { idx ->
+                println("a selected ${selectedItems[idx]}")
+            }
+        }
+
+        uiComboBoxArray1(boxPadding = 5.0, deactivationSymbol = "-", items = listOf('A', 'B', 'C', 'D'), numberOfComboBoxes = 6) {
+            x = 300.0
+            y = 50.0
+
+            onSelectionUpdate { idx ->
+                println("b selected ${selectedItems[idx]}")
+                if (selectedItems[idx] == null) a.deactivateComboBox(idx)
+                else a.activateComboBox(idx)
+            }
         }
     }
 }
