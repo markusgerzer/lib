@@ -11,11 +11,13 @@ private const val ZOOM_STEP = .05
 
 
 private var maxZoom = 5.0
+@Deprecated("Use ZoomComponent")
 var Stage.maxZoom by ::maxZoom
-
+@Deprecated("Use ZoomComponent")
 val Stage.zoomMode get() = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER)?.isNotEmpty() ?: false
 
 
+@Deprecated("Use ZoomComponent")
 fun Stage.zoomModeOn() {
     fun zoomIn() {
         val mX = mouseX
@@ -89,6 +91,7 @@ fun Stage.zoomModeOn() {
     addProp(ZOOM_MODE_EVENT_LISTENER, listener)
 }
 
+@Deprecated("Use ZoomComponent")
 fun Stage.zoomModeOff() {
     val listener = getPropOrNull<List<Closeable>>(ZOOM_MODE_EVENT_LISTENER) ?: return
     listener.forEach(Closeable::close)
