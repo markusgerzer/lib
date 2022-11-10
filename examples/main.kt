@@ -26,8 +26,8 @@ object ConfigModule : Module() {
     override val scaleAnchor = Anchor.BOTTOM
     //override val mainScene: KClass<out Scene> = SceneA::class
     //override val mainScene: KClass<out Scene> = SceneB::class
-    //override val mainScene: KClass<out Scene> = SceneC::class
-    override val mainScene: KClass<out Scene> = SceneD::class
+    override val mainScene: KClass<out Scene> = SceneC::class
+    //override val mainScene: KClass<out Scene> = SceneD::class
     override suspend fun AsyncInjector.configure() {
         mapPrototype { SceneA() }
         mapPrototype { SceneB() }

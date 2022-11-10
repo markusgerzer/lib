@@ -1,12 +1,13 @@
 package misc
 
-
+@Deprecated("Use Signal<T>()")
 class SimpleEvent {
     private val _callbacks = mutableListOf<() -> Unit>()
     fun addCallback(callback: () -> Unit) = _callbacks.add(callback)
     operator fun invoke() { for (callback in _callbacks) callback() }
 }
 
+@Deprecated("Use AsyncSignal<T>()")
 class SimpleEventSuspend {
     private val _callbacks = mutableListOf<suspend () -> Unit>()
     fun addCallback(callback: suspend () -> Unit) = _callbacks.add(callback)
