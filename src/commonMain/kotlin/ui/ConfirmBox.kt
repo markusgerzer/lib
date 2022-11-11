@@ -8,24 +8,24 @@ import com.soywiz.korio.async.*
 
 inline fun Stage.confirmBox(
     msg: String,
-    textYesButton: String = "Yes",
-    textNoButton: String = "No",
     width: Double,
     height: Double,
     rx: Double,
     ry: Double,
+    textYesButton: String = "Yes",
+    textNoButton: String = "No",
     block: @ViewDslMarker ConfirmBox.() -> Unit = {}
-) = ConfirmBox(this, msg, textYesButton, textNoButton, width, height, rx, ry).apply(block)
+) = ConfirmBox(this, msg, width, height, rx, ry, textYesButton, textNoButton).apply(block)
 
 class ConfirmBox(
     stage: Stage,
     val msg: String,
-    private val textYesButton: String = "Yes",
-    private val textNoButton: String = "No",
     width: Double = 300.0,
     height: Double = 100.0,
     rx: Double = 20.0,
     ry: Double = 20.0,
+    private val textYesButton: String = "Yes",
+    private val textNoButton: String = "No",
 ) {
     var textSize
         get() = msgText.textSize
