@@ -8,16 +8,20 @@ import com.soywiz.korio.async.*
 
 inline fun Stage.confirmBox(
     msg: String,
+    textYesButton: String = "Yes",
+    textNoButton: String = "No",
     width: Double,
     height: Double,
     rx: Double,
     ry: Double,
     block: @ViewDslMarker ConfirmBox.() -> Unit = {}
-) = ConfirmBox(this, msg, width, height, rx, ry).apply(block)
+) = ConfirmBox(this, msg, textYesButton, textNoButton, width, height, rx, ry).apply(block)
 
 class ConfirmBox(
     stage: Stage,
     val msg: String,
+    private val textYesButton: String = "Yes",
+    private val textNoButton: String = "No",
     width: Double = 300.0,
     height: Double = 100.0,
     rx: Double = 20.0,
@@ -46,7 +50,7 @@ class ConfirmBox(
             strokeThickness = 4.0
             centerOn(clickBlocker)
 
-            uiButton("Yes") {
+            uiButton(textYesButton) {
                 alignLeftToLeftOf(this@roundRect, textSize)
                 alignBottomToBottomOf(this@roundRect, textSize)
                 onClick {
@@ -54,7 +58,7 @@ class ConfirmBox(
                     onConfirm()
                 }
             }
-            uiButton("No") {
+            uiButton(textNoButton) {
                 alignRightToRightOf(this@roundRect, textSize)
                 alignBottomToBottomOf(this@roundRect, textSize)
                 onClick {
