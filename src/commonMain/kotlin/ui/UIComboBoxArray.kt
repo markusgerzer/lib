@@ -26,6 +26,13 @@ class UIComboBoxArray1<T>(
     items: List<T>,
     val numberOfComboBoxes: Int
 ): UIView(boxWidth, boxHeight) {
+    override fun <T> setSkinProperty(property: String, value: T) {
+        super.setSkinProperty(property, value)
+        _comboBoxes.forEach { uiComboBox ->
+            uiComboBox.setSkinProperty(property, value)
+        }
+    }
+
     private val _comboBoxes = Array(numberOfComboBoxes) {
         uiComboBox(
             boxWidth, boxHeight,

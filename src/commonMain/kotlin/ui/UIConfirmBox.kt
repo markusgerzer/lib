@@ -6,7 +6,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
 import com.soywiz.korio.async.*
 
-inline fun Stage.confirmBox(
+inline fun Stage.uiConfirmBox(
     msg: String,
     width: Double,
     height: Double,
@@ -14,10 +14,10 @@ inline fun Stage.confirmBox(
     ry: Double,
     textYesButton: String = "Yes",
     textNoButton: String = "No",
-    block: @ViewDslMarker ConfirmBox.() -> Unit = {}
-) = ConfirmBox(this, msg, width, height, rx, ry, textYesButton, textNoButton).apply(block)
+    block: @ViewDslMarker UIConfirmBox.() -> Unit = {}
+) = UIConfirmBox(this, msg, width, height, rx, ry, textYesButton, textNoButton).apply(block)
 
-class ConfirmBox(
+class UIConfirmBox(
     stage: Stage,
     val msg: String,
     width: Double = 300.0,
@@ -26,11 +26,7 @@ class ConfirmBox(
     ry: Double = 20.0,
     private val textYesButton: String = "Yes",
     private val textNoButton: String = "No",
-) {
-    var textSize
-        get() = msgText.textSize
-        set(value) { msgText.textSize = value }
-
+): UIView(width, height) {
     var stroke
         get() = box.stroke
         set(value) { box.stroke = value }
@@ -70,6 +66,7 @@ class ConfirmBox(
 
     private val msgText = box.uiText(msg) {
         textColor = Colors.BLACK
+        textSize = this@UIConfirmBox.textSize
         alignLeftToLeftOf(box, textSize)
         alignTopToTopOf(box, textSize)
     }

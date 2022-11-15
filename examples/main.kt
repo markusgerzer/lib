@@ -3,6 +3,7 @@ import com.soywiz.korev.*
 import com.soywiz.korge.*
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
+import com.soywiz.korge.ui.*
 import com.soywiz.korge.view.*
 import com.soywiz.korgw.*
 import com.soywiz.korim.color.*
@@ -26,8 +27,8 @@ object ConfigModule : Module() {
     override val scaleAnchor = Anchor.BOTTOM
     //override val mainScene: KClass<out Scene> = SceneA::class
     //override val mainScene: KClass<out Scene> = SceneB::class
-    override val mainScene: KClass<out Scene> = SceneC::class
-    //override val mainScene: KClass<out Scene> = SceneD::class
+    //override val mainScene: KClass<out Scene> = SceneC::class
+    override val mainScene: KClass<out Scene> = SceneD::class
     override suspend fun AsyncInjector.configure() {
         mapPrototype { SceneA() }
         mapPrototype { SceneB() }
@@ -104,7 +105,7 @@ class SceneC : Scene() {
     override suspend fun SContainer.sceneMain() {
         while (true) {
             val job = launchImmediately(Dispatchers.Default) {
-                stage?.confirmBox("Message....", 300.0, 100.0, 20.0, 20.0) {
+                stage?.uiConfirmBox("Message....", 300.0, 100.0, 20.0, 20.0) {
                     onConfirm { println("Confirmed") }
                     onNoConfirm { println("Not confirmed") }
                 }
@@ -117,6 +118,9 @@ class SceneC : Scene() {
 
 class SceneD : Scene() {
     override suspend fun SContainer.sceneMain() {
+        //stage?.uiSkin = UISkin {
+        //    textSize = 32.0
+        //}
 
         val a = uiComboBoxArray2(boxPadding = 5.0, items = (1..6).toList(), numberOfComboBoxes = 6) {
             x = 100.0
@@ -132,6 +136,8 @@ class SceneD : Scene() {
         uiComboBoxArray1(boxPadding = 5.0, deactivationSymbol = "-", items = listOf('A', 'B', 'C', 'D'), numberOfComboBoxes = 6) {
             x = 300.0
             y = 50.0
+
+            textSize = 32.0
 
             onSelectionUpdate { idx ->
                 println("b selected ${selectedItems[idx]}")
