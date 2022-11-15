@@ -33,7 +33,7 @@ class UIComboBoxArray1<T>(
         }
     }
 
-    private val _comboBoxes = Array(numberOfComboBoxes) {
+    private val _comboBoxes = List(numberOfComboBoxes) {
         uiComboBox(
             boxWidth, boxHeight,
             items = if (it == 0) items else listOf(deactivationSymbol) + items
@@ -127,6 +127,7 @@ class UIComboBoxArray2<T>(
 
     private fun comboBoxOf(idx: Int, items: List<T>, selectedIndex: Int = 0) =
         uiComboBox(boxWidth, boxHeight, items = items, selectedIndex = selectedIndex) {
+            textSize = this@UIComboBoxArray2.textSize
             y = idx * (boxHeight + boxPadding)
             if (items.isEmpty()) deactivate()
             onSelectionUpdate {

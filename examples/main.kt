@@ -118,13 +118,15 @@ class SceneC : Scene() {
 
 class SceneD : Scene() {
     override suspend fun SContainer.sceneMain() {
-        //stage?.uiSkin = UISkin {
-        //    textSize = 32.0
-        //}
+        stage?.uiSkin = UISkin {
+            textSize = 32.0
+        }
 
         val a = uiComboBoxArray2(boxPadding = 5.0, items = (1..6).toList(), numberOfComboBoxes = 6) {
             x = 100.0
             y = 50.0
+
+            textSize = 32.0
 
             for (i in 1 until 6) deactivateComboBox(i)
 
