@@ -12,10 +12,11 @@ inline fun Stage.uiConfirmBox(
     height: Double,
     rx: Double,
     ry: Double,
+    padding: Double = 16.0,
     textYesButton: String = "Yes",
     textNoButton: String = "No",
     block: @ViewDslMarker UIConfirmBox.() -> Unit = {}
-) = UIConfirmBox(this, msg, width, height, rx, ry, textYesButton, textNoButton).apply(block)
+) = UIConfirmBox(this, msg, width, height, rx, ry, padding, textYesButton, textNoButton).apply(block)
 
 class UIConfirmBox(
     stage: Stage,
@@ -24,6 +25,7 @@ class UIConfirmBox(
     height: Double = 100.0,
     rx: Double = 20.0,
     ry: Double = 20.0,
+    padding: Double = 16.0,
     private val textYesButton: String = "Yes",
     private val textNoButton: String = "No",
 ): UIView(width, height) {
@@ -38,6 +40,13 @@ class UIConfirmBox(
     val onConfirm = Signal<Unit>()
     val onNoConfirm = Signal<Unit>()
 
+    override fun <T> setSkinProperty(property: String, value: T) {
+        super.setSkinProperty(property, value)
+        msgText.setSkinProperty(property, value)
+        yesButton.setSkinProperty(property, value)
+        noButton.setSkinProperty(property, value)
+    }
+
     private val clickBlocker = stage.fixedSizeContainer(stage.width, stage.height)
 
     private val box =
@@ -45,29 +54,29 @@ class UIConfirmBox(
             stroke = Colors.BLACK
             strokeThickness = 4.0
             centerOn(clickBlocker)
-
-            uiButton(textYesButton) {
-                alignLeftToLeftOf(this@roundRect, textSize)
-                alignBottomToBottomOf(this@roundRect, textSize)
-                onClick {
-                    clickBlocker.removeFromParent()
-                    onConfirm()
-                }
-            }
-            uiButton(textNoButton) {
-                alignRightToRightOf(this@roundRect, textSize)
-                alignBottomToBottomOf(this@roundRect, textSize)
-                onClick {
-                    clickBlocker.removeFromParent()
-                    onNoConfirm()
-                }
-            }
         }
+
+    private val yesButton = UIButton(text = textYesButton).addTo(box) {
+        alignLeftToLeftOf(box, padding)
+        alignBottomToBottomOf(box, padding)
+        onClick {
+            clickBlocker.removeFromParent()
+            onConfirm()
+        }
+    }
+
+    private val noButton = UIButton(text = textNoButton).addTo(box) {
+        alignRightToRightOf(box, padding)
+        alignBottomToBottomOf(box, padding)
+        onClick {
+            clickBlocker.removeFromParent()
+            onNoConfirm()
+        }
+    }
 
     private val msgText = box.uiText(msg) {
         textColor = Colors.BLACK
-        textSize = this@UIConfirmBox.textSize
-        alignLeftToLeftOf(box, textSize)
-        alignTopToTopOf(box, textSize)
+        alignLeftToLeftOf(box, padding)
+        alignTopToTopOf(box, padding)
     }
 }

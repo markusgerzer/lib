@@ -27,8 +27,8 @@ object ConfigModule : Module() {
     override val scaleAnchor = Anchor.BOTTOM
     //override val mainScene: KClass<out Scene> = SceneA::class
     //override val mainScene: KClass<out Scene> = SceneB::class
-    //override val mainScene: KClass<out Scene> = SceneC::class
-    override val mainScene: KClass<out Scene> = SceneD::class
+    override val mainScene: KClass<out Scene> = SceneC::class
+    //override val mainScene: KClass<out Scene> = SceneD::class
     override suspend fun AsyncInjector.configure() {
         mapPrototype { SceneA() }
         mapPrototype { SceneB() }
@@ -105,7 +105,8 @@ class SceneC : Scene() {
     override suspend fun SContainer.sceneMain() {
         while (true) {
             val job = launchImmediately(Dispatchers.Default) {
-                stage?.uiConfirmBox("Message....", 300.0, 100.0, 20.0, 20.0) {
+                stage?.uiConfirmBox("Message....", 400.0, 124.0, 20.0, 20.0) {
+                    textSize = 32.0
                     onConfirm { println("Confirmed") }
                     onNoConfirm { println("Not confirmed") }
                 }
