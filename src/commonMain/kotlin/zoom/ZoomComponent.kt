@@ -25,15 +25,12 @@ class ZoomComponent(val view: View) {
     fun zoomIn(views: Views) {
         val mX = views.globalMouseX * view.scaleX
         val mY = views.globalMouseY * view.scaleY
-        //view.scale = (view.scale + zoomStep).coerceAtMost(maxZoom)
-        view.scaleX = (view.scaleX + zoomStep).coerceAtMost(maxZoom)
-        view.scaleY = (view.scaleY + zoomStep).coerceAtMost(maxZoom)
+        view.scale = (view.scale + zoomStep).coerceAtMost(maxZoom)
         view.x -= views.globalMouseX * view.scaleX - mX
         view.y -= views.globalMouseY * view.scaleY - mY
     }
 
     fun zoomOut() {
-        /*
         if (view.scale <= 1.0 + zoomStep) {
             view.scale = 1.0
             view.x = .0
@@ -42,24 +39,6 @@ class ZoomComponent(val view: View) {
             val f = (view.scale - 1.0) / zoomStep
             view.scale -= zoomStep
             view.x += if (view.x > .0) view.x / f else -view.x / f
-            view.y += if (view.y > .0) view.y / f else -view.y / f
-        }
-         */
-        if (view.scaleX <= 1.0 + zoomStep) {
-            view.scaleX = 1.0
-            view.x = .0
-        } else {
-            val f = (view.scaleX - 1.0) / zoomStep
-            view.scaleX -= zoomStep
-            view.x += if (view.x > .0) view.x / f else -view.x / f
-        }
-
-        if (view.scaleY <= 1.0 + zoomStep) {
-            view.scaleY = 1.0
-            view.y = .0
-        } else {
-            val f = (view.scaleY - 1.0) / zoomStep
-            view.scaleY -= zoomStep
             view.y += if (view.y > .0) view.y / f else -view.y / f
         }
     }
