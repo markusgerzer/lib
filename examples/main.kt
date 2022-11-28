@@ -26,8 +26,8 @@ object ConfigModule : Module() {
     override val clipBorders = false
     override val scaleAnchor = Anchor.BOTTOM
     //override val mainScene: KClass<out Scene> = SceneA::class
-    //override val mainScene: KClass<out Scene> = SceneB::class
-    override val mainScene: KClass<out Scene> = SceneC::class
+    override val mainScene: KClass<out Scene> = SceneB::class
+    //override val mainScene: KClass<out Scene> = SceneC::class
     //override val mainScene: KClass<out Scene> = SceneD::class
     override suspend fun AsyncInjector.configure() {
         mapPrototype { SceneA() }
@@ -37,6 +37,7 @@ object ConfigModule : Module() {
     }
 }
 
+// Stage Zoom
 class SceneA : Scene() {
     override suspend fun SContainer.sceneInit() {
         val gridSize = 9
@@ -71,6 +72,7 @@ class SceneA : Scene() {
     }
 }
 
+// ZoomComponent
 class SceneB : Scene() {
     override suspend fun SContainer.sceneInit() {
         val gridSize = 9
@@ -101,6 +103,7 @@ class SceneB : Scene() {
     }
 }
 
+// ConfirmBox
 class SceneC : Scene() {
     override suspend fun SContainer.sceneMain() {
         while (true) {
@@ -117,6 +120,7 @@ class SceneC : Scene() {
     }
 }
 
+// ComboBoxArray
 class SceneD : Scene() {
     override suspend fun SContainer.sceneMain() {
         stage?.uiSkin = UISkin {
